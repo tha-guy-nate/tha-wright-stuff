@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tha-wright-stuff"
+version = "0.1.0"
+description = "A Tabular Helper meta-package that bundles the full tha-* library family in a single install."
+license = { text = "MIT" }
+authors = [{ name = "Nate Wright" }]
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+keywords = ["tabular", "helper", "api", "csv", "aws", "edfi", "google", "snowflake", "utilities", "meta"]
+dependencies = [
+    "tha-csv-runner>=0.2.6",
+    "tha-map-runner>=0.2.7",
+    "tha-req-runner>=0.2.2",
+    "tha-aws-runner>=0.1.15",
+    "tha-utils-helper>=0.2.3",
+    "tha-edfi-runner>=0.1.2",
+    "tha-google-runner>=0.1.0",
+    "tha-snowflake-runner>=0.1.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.5",
+    "mypy>=1.10",
+]
+
+[project.urls]
+Homepage = "https://github.com/tha-guy-nate/tha-wright-stuff"
+Issues = "https://github.com/tha-guy-nate/tha-wright-stuff/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tha_wright_stuff"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "RUF"]
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
