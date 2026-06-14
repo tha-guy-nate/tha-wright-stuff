@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "tha-wright-stuff"
 version = "0.1.0"
 description = "A Tabular Helper meta-package that bundles the full tha-* library family in a single install."
+readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "Nate Wright" }]
 requires-python = ">=3.10"
