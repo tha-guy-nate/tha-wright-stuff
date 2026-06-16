@@ -41,38 +41,30 @@ from tha_utils_helper import (
 
 __version__ = "0.1.2"
 __all__ = [
-    # tha-aws-runner
     "AWSBase",
     "AWSClients",
     "AwsError",
     "BatchCountResult",
     "BatchQueryResult",
     "BatchUpdateResult",
-    # tha-csv-runner
     "ConfigError",
     "DateError",
     "DdbCostTracker",
     "DictUtils",
-    # tha-edfi-runner
     "EdfiError",
-    # tha-google-runner
     "GoogleError",
-    "ThaDocs",
     "ListUtils",
-    # tha-map-runner
     "MapperError",
     "NumError",
-    # tha-req-runner
     "ReqError",
-    # tha-snowflake-runner
     "Session",
     "SnowflakeError",
     "StrError",
     "ThaCSV",
     "ThaDT",
     "ThaDdb",
-    # tha-utils-helper
     "ThaDict",
+    "ThaDocs",
     "ThaEdfiBase",
     "ThaGsi",
     "ThaList",
