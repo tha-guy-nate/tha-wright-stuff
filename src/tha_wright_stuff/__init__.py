@@ -39,7 +39,7 @@ from tha_utils_helper import (
     UtilsError,
 )
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __all__ = [
     "AWSBase",
     "AWSClients",
