@@ -19,7 +19,7 @@ from tha_aws_runner import (
 )
 from tha_csv_runner import ConfigError, ThaCSV
 from tha_edfi_runner import EdfiError, ThaEdfiBase, ThaStudentAssessment
-from tha_google_runner import GoogleError, ThaDocs, ThaSheets
+from tha_google_runner import GoogleError, ThaDocs, ThaDrive, ThaGmail, ThaSheets, ThaSlides
 from tha_map_runner import MapperError, ThaMap
 from tha_req_runner import ReqError, ThaReq
 from tha_snowflake_runner import Session, SnowflakeError, ThaSnowflake, list_profiles
@@ -39,7 +39,7 @@ from tha_utils_helper import (
     UtilsError,
 )
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __all__ = [
     "AWSBase",
     "AWSClients",
@@ -65,7 +65,9 @@ __all__ = [
     "ThaDdb",
     "ThaDict",
     "ThaDocs",
+    "ThaDrive",
     "ThaEdfiBase",
+    "ThaGmail",
     "ThaGsi",
     "ThaList",
     "ThaMap",
@@ -74,6 +76,7 @@ __all__ = [
     "ThaS3",
     "ThaSSM",
     "ThaSheets",
+    "ThaSlides",
     "ThaSnowflake",
     "ThaStr",
     "ThaStudentAssessment",

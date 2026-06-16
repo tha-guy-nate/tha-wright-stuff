@@ -10,19 +10,23 @@ def test_top_level_imports() -> None:
         Session,
         SnowflakeError,
         ThaCSV,
-        ThaDT,
         ThaDdb,
         ThaDict,
+        ThaDocs,
+        ThaDrive,
+        ThaDT,
         ThaEdfiBase,
+        ThaGmail,
         ThaGsi,
         ThaList,
         ThaMap,
         ThaNum,
         ThaReq,
         ThaS3,
-        ThaSSM,
         ThaSheets,
+        ThaSlides,
         ThaSnowflake,
+        ThaSSM,
         ThaStr,
         ThaStudentAssessment,
         ThaType,
@@ -46,6 +50,10 @@ def test_top_level_imports() -> None:
     assert ThaStudentAssessment is not None
     assert ThaEdfiBase is not None
     assert ThaSheets is not None
+    assert ThaDocs is not None
+    assert ThaDrive is not None
+    assert ThaSlides is not None
+    assert ThaGmail is not None
     assert ThaSnowflake is not None
     assert Session is not None
     assert AWSBase is not None

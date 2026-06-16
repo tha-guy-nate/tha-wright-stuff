@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tha-wright-stuff"
-version = "0.1.2"
+version = "0.1.3"
 description = "A Tabular Helper meta-package that bundles the full tha-* library family in a single install."
 readme = "README.md"
 license = { text = "MIT" }
@@ -15,6 +15,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Intended Audience :: Developers",
@@ -29,7 +31,7 @@ dependencies = [
     "tha-aws-runner>=0.1.15",
     "tha-utils-helper>=0.2.3",
     "tha-edfi-runner>=0.1.2",
-    "tha-google-runner>=0.1.2",
+    "tha-google-runner>=0.1.3",
     "tha-snowflake-runner>=0.1.1",
 ]
 

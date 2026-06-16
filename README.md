@@ -17,7 +17,7 @@ pip install tha-wright-stuff
 One install pulls in every `tha-*` library and re-exports all of their public symbols from a single namespace. Instead of installing and importing from eight separate packages, you can just do:
 
 ```python
-from tha_wright_stuff import ThaCSV, ThaMap, ThaReq, ThaDict, ThaDdb, ThaEdfiBase, ThaSheets, ThaDocs, ThaSnowflake
+from tha_wright_stuff import ThaCSV, ThaMap, ThaReq, ThaDict, ThaDdb, ThaEdfiBase, ThaSheets, ThaDocs, ThaDrive, ThaSlides, ThaGmail, ThaSnowflake
 ```
 
 Every public class, function, and error type from all eight libraries is available at the top level.
@@ -38,7 +38,7 @@ Every public class, function, and error type from all eight libraries is availab
 | **tha-aws-runner** | [![PyPI](https://img.shields.io/pypi/v/tha-aws-runner)](https://pypi.org/project/tha-aws-runner/) | [tha-aws-runner](https://github.com/tha-guy-nate/tha-aws-runner) | DynamoDB (`ThaDdb`), GSI queries (`ThaGsi`), S3 (`ThaS3`), SSM Parameter Store (`ThaSSM`), a `DdbCostTracker` context manager that tallies RCU/WCU and USD cost per run, and standalone helpers (`cli_auth_check`, `current_identity`, `parse_arn`, `parse_assumed_role_arn`). |
 | **tha-utils-helper** | [![PyPI](https://img.shields.io/pypi/v/tha-utils-helper)](https://pypi.org/project/tha-utils-helper/) | [tha-utils-helper](https://github.com/tha-guy-nate/tha-utils-helper) | Zero-dependency utilities: `ThaStr` (slugify, format), `ThaNum` (currency, parens-as-negative, cast), `ThaDT` (auto-detect date formats), `ThaDict` (pick, omit, rename), `ThaList` (chunk, flatten), `ThaType` (bool/int/float coercion). All include matching `*_rows` batch methods. |
 | **tha-edfi-runner** | [![PyPI](https://img.shields.io/pypi/v/tha-edfi-runner)](https://pypi.org/project/tha-edfi-runner/) | [tha-edfi-runner](https://github.com/tha-guy-nate/tha-edfi-runner) | Ed-Fi ODS API client — OAuth client-credentials auth, pagination, and chunked parallel posting via `ThreadPoolExecutor`. |
-| **tha-google-runner** | [![PyPI](https://img.shields.io/pypi/v/tha-google-runner)](https://pypi.org/project/tha-google-runner/) | [tha-google-runner](https://github.com/tha-guy-nate/tha-google-runner) | Typed wrappers for Google Sheets (`ThaSheets`) and Google Docs (`ThaDocs`) — ADC or OAuth2 auth, read/write/upsert rows, and text read/append/replace on Docs. |
+| **tha-google-runner** | [![PyPI](https://img.shields.io/pypi/v/tha-google-runner)](https://pypi.org/project/tha-google-runner/) | [tha-google-runner](https://github.com/tha-guy-nate/tha-google-runner) | Typed wrappers for Google Sheets (`ThaSheets`), Docs (`ThaDocs`), Drive (`ThaDrive`), Slides (`ThaSlides`), and Gmail (`ThaGmail`) — OAuth2 or ADC auth, read/write/upsert rows, file download, presentation creation, and email sending. |
 | **tha-snowflake-runner** | [![PyPI](https://img.shields.io/pypi/v/tha-snowflake-runner)](https://pypi.org/project/tha-snowflake-runner/) | [tha-snowflake-runner](https://github.com/tha-guy-nate/tha-snowflake-runner) | Snowflake query runner (`ThaSnowflake`) — named connection profiles, query execution to row dicts, and chunked parallel inserts. |
 
 ---
