@@ -51,7 +51,7 @@ Every public class, function, and error type from all eight libraries is availab
 
 - Python 3.10+
 
-All eight libraries are installed automatically as dependencies. Optional extras from individual libraries (e.g. `tha-csv-runner[excel]`, `tha-req-runner[httpx]`) are not pulled in by default — install them separately if needed.
+All eight libraries are installed automatically as dependencies. Use `pip install tha-wright-stuff[all]` to also pull in optional extras (currently `tha-req-runner[httpx]`).
 
 ---
 
