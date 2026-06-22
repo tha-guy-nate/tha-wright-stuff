@@ -5,19 +5,16 @@ on:
     - cron: '0 8 * * *'  # Daily at 8am UTC
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
 
-      - name: Check floors and write badge JSON
+      - name: Check dependency floors
         run: |
           python3 - <<'PYEOF'
-          import re, json
+          import re, json, sys
           from urllib.request import urlopen
 
           with open("pyproject.toml") as f:
@@ -40,29 +37,6 @@ jobs:
 
           if not stale:
               print("  all floors current")
-
-          badge = {
-              "schemaVersion": 1,
-              "label": "dep floors",
-              "message": "stale" if stale else "current",
-              "color": "orange" if stale else "brightgreen",
-          }
-          with open("/tmp/dep-floors.json", "w") as f:
-              json.dump(badge, f)
+          else:
+              sys.exit(1)
           PYEOF
-
-      - name: Push badge to badges branch
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin badges 2>/dev/null || true
-          if git rev-parse --verify origin/badges >/dev/null 2>&1; then
-            git checkout -B badges origin/badges
-          else
-            git checkout --orphan badges
-            git rm -rf . 2>/dev/null || true
-          fi
-          cp /tmp/dep-floors.json dep-floors.json
-          git add dep-floors.json
-          git diff --cached --quiet || git commit -m "chore: update dep floors badge"
-          git push origin badges

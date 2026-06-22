@@ -1,7 +1,7 @@
 # tha-wright-stuff
 
 [![PyPI](https://img.shields.io/pypi/v/tha-wright-stuff)](https://pypi.org/project/tha-wright-stuff/)
-[![dep floors](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/tha-guy-nate/tha-wright-stuff/badges/dep-floors.json)](https://github.com/tha-guy-nate/tha-wright-stuff/actions/workflows/dep-floors-check.yml)
+[![dep floors](https://github.com/tha-guy-nate/tha-wright-stuff/actions/workflows/dep-floors-check.yml/badge.svg)](https://github.com/tha-guy-nate/tha-wright-stuff/actions/workflows/dep-floors-check.yml)
 
 > Install the entire Tabular Helper (`tha-*`) library family in one shot.
 
