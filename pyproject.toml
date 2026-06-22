@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tha-wright-stuff"
-version = "0.1.6"
+version = "0.1.7"
 description = "A Tabular Helper meta-package that bundles the full tha-* library family in a single install."
 readme = "README.md"
 license = { text = "MIT" }
@@ -35,6 +35,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+all = [
+    "tha-req-runner[httpx]",
+]
 dev = [
     "pytest>=9.1.0",
     "ruff>=0.15.17",

@@ -6,7 +6,8 @@
 > Install the entire Tabular Helper (`tha-*`) library family in one shot.
 
 ```bash
-pip install tha-wright-stuff
+pip install tha-wright-stuff        # core family
+pip install tha-wright-stuff[all]   # + all optional extras (httpx backend, etc.)
 ```
 
 ---
