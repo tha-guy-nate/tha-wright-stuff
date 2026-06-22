@@ -1,0 +1,111 @@
+name: Bump Dependency Floors
+
+on:
+  schedule:
+    - cron: '0 9 * * 5'  # Fridays at 9am UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.2.0
+        with:
+          version: "latest"
+
+      - name: Check and update dependency floors
+        id: check
+        run: |
+          python3 - <<'PYEOF'
+          import re, json, os, sys
+          from urllib.request import urlopen
+
+          with open("pyproject.toml") as f:
+              content = f.read()
+
+          pattern = r'"(tha-[a-z-]+)>=([\d]+\.[\d]+\.[\d]+)"'
+          deps = re.findall(pattern, content)
+
+          bumps = []
+          for pkg, floor in deps:
+              try:
+                  with urlopen(f"https://pypi.org/pypi/{pkg}/json", timeout=10) as r:
+                      latest = json.load(r)["info"]["version"]
+              except Exception:
+                  print(f"  skipping {pkg} (PyPI lookup failed)")
+                  continue
+
+              floor_t = tuple(int(x) for x in floor.split("."))
+              latest_t = tuple(int(x) for x in latest.split("."))
+
+              if latest_t > floor_t:
+                  bumps.append((pkg, floor, latest))
+                  print(f"  {pkg}: >={floor} -> >={latest}")
+              else:
+                  print(f"  {pkg}: >={floor} ok (latest={latest})")
+
+          gho = os.environ["GITHUB_OUTPUT"]
+          if not bumps:
+              print("All floors current -- no PR needed.")
+              with open(gho, "a") as f:
+                  f.write("changed=false\n")
+              sys.exit(0)
+
+          new_content = content
+          for pkg, old, new in bumps:
+              new_content = new_content.replace(f'"{pkg}>={old}"', f'"{pkg}>={new}"')
+
+          ver_m = re.search(r'^version = "(\d+)\.(\d+)\.(\d+)"', new_content, re.MULTILINE)
+          major, minor, patch = int(ver_m.group(1)), int(ver_m.group(2)), int(ver_m.group(3))
+          old_ver = f"{major}.{minor}.{patch}"
+          new_ver = f"{major}.{minor}.{patch + 1}"
+          new_content = new_content.replace(f'version = "{old_ver}"', f'version = "{new_ver}"')
+
+          with open("pyproject.toml", "w") as f:
+              f.write(new_content)
+
+          pr_lines = [f"- `{pkg}`: `>={old}` -> `>={new}`" for pkg, old, new in bumps]
+          pr_body = (
+              "## Dependency Floor Bumps\n\n"
+              + "\n".join(pr_lines)
+              + f"\n\nPackage version bumped `{old_ver}` -> `{new_ver}`."
+          )
+
+          with open("/tmp/pr_body.txt", "w") as f:
+              f.write(pr_body)
+
+          with open(gho, "a") as f:
+              f.write("changed=true\n")
+              f.write(f"new_version={new_ver}\n")
+
+          print(f"pyproject.toml updated -- version {old_ver} -> {new_ver}")
+          PYEOF
+
+      - name: Update lockfile
+        if: steps.check.outputs.changed == 'true'
+        run: uv lock
+
+      - name: Commit and open PR
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH="chore/bump-dep-floors-$(date +%Y%m%d)"
+          git checkout -b "$BRANCH"
+          git add pyproject.toml uv.lock
+          git commit -m "chore: bump tha-* dependency floors to v${{ steps.check.outputs.new_version }}"
+          git push origin "$BRANCH"
+          gh pr create \
+            --title "chore: bump tha-* dependency floors (${{ steps.check.outputs.new_version }})" \
+            --body-file /tmp/pr_body.txt \
+            --base main \
+            --head "$BRANCH"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
