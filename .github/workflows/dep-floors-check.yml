@@ -1,0 +1,68 @@
+name: Dep Floors Status
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Daily at 8am UTC
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check floors and update badge
+        run: |
+          python3 - <<'PYEOF'
+          import re, json, os
+          from urllib.request import urlopen, Request
+
+          with open("pyproject.toml") as f:
+              content = f.read()
+
+          pattern = r'"(tha-[a-z-]+)>=([\d]+\.[\d]+\.[\d]+)"'
+          deps = re.findall(pattern, content)
+
+          stale = []
+          for pkg, floor in deps:
+              try:
+                  with urlopen(f"https://pypi.org/pypi/{pkg}/json", timeout=10) as r:
+                      latest = json.load(r)["info"]["version"]
+              except Exception:
+                  print(f"  skipping {pkg} (PyPI lookup failed)")
+                  continue
+              if tuple(int(x) for x in latest.split(".")) > tuple(int(x) for x in floor.split(".")):
+                  stale.append(f"{pkg} (>={floor}, latest {latest})")
+
+          for s in stale:
+              print(f"  stale: {s}")
+          if not stale:
+              print("  all floors current")
+
+          badge = {
+              "schemaVersion": 1,
+              "label": "dep floors",
+              "message": "stale" if stale else "current",
+              "color": "orange" if stale else "brightgreen",
+          }
+          badge_json = json.dumps(badge)
+
+          gist_id = os.environ["GIST_ID"]
+          token = os.environ["GIST_TOKEN"]
+          payload = json.dumps({"files": {"dep-floors.json": {"content": badge_json}}}).encode()
+          req = Request(
+              f"https://api.github.com/gists/{gist_id}",
+              method="PATCH",
+              data=payload,
+              headers={
+                  "Authorization": f"token {token}",
+                  "Accept": "application/vnd.github+json",
+                  "Content-Type": "application/json",
+              },
+          )
+          with urlopen(req) as r:
+              print(f"badge gist updated ({r.status}): {badge['message']}")
+          PYEOF
+        env:
+          GIST_ID: e0dc2d42890a54db62d736b07d9ad906
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
