@@ -6,8 +6,8 @@
 > Install the entire Tabular Helper (`tha-*`) library family in one shot.
 
 ```bash
-pip install tha-wright-stuff        # core family
-pip install tha-wright-stuff[all]   # + all optional extras (httpx backend, etc.)
+pip install tha-wright-stuff[all]   # recommended: core family + all optional extras
+pip install tha-wright-stuff        # core family only
 ```
 
 ---
@@ -21,7 +21,22 @@ pip install tha-wright-stuff[all]   # + all optional extras (httpx backend, etc.
 One install pulls in every `tha-*` library and re-exports all of their public symbols from a single namespace. Instead of installing and importing from eight separate packages, you can just do:
 
 ```python
-from tha_wright_stuff import ThaCSV, ThaMap, ThaReq, ThaDict, ThaDdb, ThaEdfiBase, ThaSheets, ThaDocs, ThaDrive, ThaSlides, ThaGmail, ThaSnowflake
+# AWS
+from tha_wright_stuff import ThaDdb, ThaGsi, ThaS3, ThaSSM, DdbCostTracker, cli_auth_check, current_identity, parse_arn, parse_assumed_role_arn
+# CSV
+from tha_wright_stuff import ThaCSV
+# Ed-Fi
+from tha_wright_stuff import ThaEdfiBase, ThaStudentAssessment
+# Google
+from tha_wright_stuff import ThaSheets, ThaDocs, ThaDrive, ThaSlides, ThaGmail
+# Map
+from tha_wright_stuff import ThaMap
+# Requests
+from tha_wright_stuff import ThaReq
+# Snowflake
+from tha_wright_stuff import ThaSnowflake, Session, list_profiles
+# Utils
+from tha_wright_stuff import ThaStr, ThaNum, ThaDT, ThaDict, ThaList, ThaType
 ```
 
 Every public class, function, and error type from all eight libraries is available at the top level.
@@ -51,7 +66,7 @@ Every public class, function, and error type from all eight libraries is availab
 
 - Python 3.10+
 
-All eight libraries are installed automatically as dependencies. Use `pip install tha-wright-stuff[all]` to also pull in optional extras (currently `tha-req-runner[httpx]`).
+All eight libraries are installed automatically as dependencies. The `[all]` extra additionally installs optional extras across the family (currently `tha-req-runner[httpx]` for the httpx transport backend).
 
 ---
 
