@@ -1,5 +1,9 @@
 """tha-wright-stuff: the full tha-* Tabular Helper library family in one install."""
 
+from importlib.metadata import version
+
+__version__ = version("tha-wright-stuff")
+
 from tha_aws_runner import (
     AWSBase,
     AWSClients,
@@ -39,7 +43,6 @@ from tha_utils_helper import (
     UtilsError,
 )
 
-__version__ = "0.1.4"
 __all__ = [
     "AWSBase",
     "AWSClients",

@@ -88,10 +88,6 @@ jobs:
           print(f"pyproject.toml updated -- version {old_ver} -> {new_ver}")
           PYEOF
 
-      - name: Update lockfile
-        if: steps.check.outputs.changed == 'true'
-        run: uv lock
-
       - name: Commit and open PR
         if: steps.check.outputs.changed == 'true'
         run: |
@@ -99,7 +95,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           BRANCH="chore/bump-dep-floors-$(date +%Y%m%d)"
           git checkout -b "$BRANCH"
-          git add pyproject.toml uv.lock
+          git add pyproject.toml
           git commit -m "chore: bump tha-* dependency floors to v${{ steps.check.outputs.new_version }}"
           git push origin "$BRANCH"
           gh pr create \
