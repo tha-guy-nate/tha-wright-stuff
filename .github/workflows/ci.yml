@@ -6,6 +6,9 @@ on:
   pull_request:
 
 jobs:
+  pre-commit:
+    uses: tha-guy-nate/tha-github-workflows/.github/workflows/pre-commit.yml@main
+
   ci:
     uses: tha-guy-nate/tha-github-workflows/.github/workflows/python-ci.yml@main
     with:
