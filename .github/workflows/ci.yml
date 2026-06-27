@@ -13,3 +13,11 @@ jobs:
     uses: tha-guy-nate/tha-github-workflows/.github/workflows/python-ci.yml@main
     with:
       python-versions: '["3.10", "3.11", "3.12", "3.13"]'
+
+  auto-tag:
+    if: github.event_name == 'push'
+    needs: [pre-commit, ci]
+    permissions:
+      contents: write
+    uses: tha-guy-nate/tha-github-workflows/.github/workflows/python-auto-tag.yml@main
+    secrets: inherit
