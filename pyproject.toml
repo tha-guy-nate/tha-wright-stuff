@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tha-wright-stuff"
-version = "0.1.12"
+version = "0.1.13"
 description = "A Tabular Helper meta-package that bundles the full tha-* library family in a single install."
 readme = "README.md"
 license = { text = "MIT" }
@@ -59,6 +59,7 @@ target-version = "py310"
 select = ["E", "F", "I", "B", "UP", "RUF"]
 
 [tool.mypy]
+strict = true
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
