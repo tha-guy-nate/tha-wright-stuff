@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tha-wright-stuff"
-version = "0.1.11"
+version = "0.1.12"
 description = "A Tabular Helper meta-package that bundles the full tha-* library family in a single install."
 readme = "README.md"
 license = { text = "MIT" }
