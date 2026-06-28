@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.14] - 2026-06-27
+### Changed
+- Bumped dep floors to latest PyPI releases: tha-aws-runner>=0.2.3, tha-csv-runner>=0.3.0, tha-map-runner>=0.2.9, tha-utils-helper>=0.2.5, tha-edfi-runner>=0.1.5, tha-google-runner>=0.1.7, tha-snowflake-runner>=0.1.4.
+
 ## [0.1.13] - 2026-06-27
 ### Added
 - MIT license file with attribution requirement.

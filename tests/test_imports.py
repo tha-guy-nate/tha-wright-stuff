@@ -1,7 +1,7 @@
 def test_top_level_imports() -> None:
     from tha_wright_stuff import (
         AWSBase,
-        ConfigError,
+        CsvError,
         DdbCostTracker,
         EdfiError,
         GoogleError,
@@ -58,7 +58,7 @@ def test_top_level_imports() -> None:
     assert Session is not None
     assert AWSBase is not None
     assert DdbCostTracker is not None
-    assert ConfigError is not None
+    assert CsvError is not None
     assert MapperError is not None
     assert ReqError is not None
     assert UtilsError is not None
