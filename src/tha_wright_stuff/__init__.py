@@ -21,7 +21,7 @@ from tha_aws_runner import (
     parse_arn,
     parse_assumed_role_arn,
 )
-from tha_csv_runner import ConfigError, ThaCSV
+from tha_csv_runner import CsvError, ThaCSV
 from tha_edfi_runner import EdfiError, ThaEdfiBase, ThaStudentAssessment
 from tha_google_runner import GoogleError, ThaDocs, ThaDrive, ThaGmail, ThaSheets, ThaSlides
 from tha_map_runner import MapperError, ThaMap
@@ -50,7 +50,7 @@ __all__ = [
     "BatchCountResult",
     "BatchQueryResult",
     "BatchUpdateResult",
-    "ConfigError",
+    "CsvError",
     "DateError",
     "DdbCostTracker",
     "DictUtils",

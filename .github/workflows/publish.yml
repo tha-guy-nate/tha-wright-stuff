@@ -57,3 +57,42 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+
+  create-release:
+    needs: publish-pypi
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Extract changelog section
+        id: notes
+        run: |
+          python3 - <<'EOF'
+          import os, re, sys
+          version = os.environ["TAG"].lstrip("v")
+          text = open("CHANGELOG.md").read()
+          m = re.search(
+              rf"(?m)^(## \[{re.escape(version)}\].*?)(?=^## \[|\Z)",
+              text,
+              re.DOTALL,
+          )
+          if not m:
+              sys.exit(f"No CHANGELOG entry found for {version}")
+          body = m.group(1).strip()
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write("notes<<GHEOF\n")
+              f.write(body)
+              f.write("\nGHEOF\n")
+          EOF
+        env:
+          TAG: ${{ github.ref_name }}
+
+      - name: Create GitHub Release
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --title "${{ github.ref_name }}" \
+            --notes "${{ steps.notes.outputs.notes }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
