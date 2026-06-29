@@ -8,8 +8,7 @@
 > Install the entire Tabular Helper (`tha-*`) library family in one shot.
 
 ```bash
-pip install tha-wright-stuff[all]   # recommended: core family + all optional extras
-pip install tha-wright-stuff        # core family only
+pip install tha-wright-stuff
 ```
 
 ---
@@ -68,7 +67,7 @@ Every public class, function, and error type from all eight libraries is availab
 
 - Python 3.10+
 
-All eight libraries are installed automatically as dependencies. The `[all]` extra additionally installs optional extras across the family (currently `tha-req-runner[httpx]` for the httpx transport backend).
+All eight libraries are installed automatically as dependencies, including the `httpx` transport backend for `tha-req-runner`.
 
 ---
 
