@@ -2,7 +2,7 @@ name: Bump Dependency Floors
 
 on:
   schedule:
-    - cron: '0 9 * * 5'  # Fridays at 9am UTC
+    - cron: '0 9 * * *'  # Daily at 9am UTC
   workflow_dispatch:
 
 permissions:
@@ -15,16 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v8.2.0
-        with:
-          version: "latest"
-
       - name: Check and update dependency floors
         id: check
         run: |
           python3 - <<'PYEOF'
           import re, json, os, sys
+          from datetime import date
           from urllib.request import urlopen
 
           with open("pyproject.toml") as f:
@@ -71,13 +67,25 @@ jobs:
           with open("pyproject.toml", "w") as f:
               f.write(new_content)
 
+          today = date.today().isoformat()
+          bumped_summary = ", ".join(f"{pkg}>={new}" for pkg, _, new in bumps)
+          changelog_entry = (
+              f"## [{new_ver}] - {today}\n"
+              f"### Changed\n"
+              f"- Bumped dep floors: {bumped_summary}.\n"
+          )
+          with open("CHANGELOG.md") as f:
+              cl = f.read()
+          cl = cl.replace("## [Unreleased]\n", f"## [Unreleased]\n\n{changelog_entry}", 1)
+          with open("CHANGELOG.md", "w") as f:
+              f.write(cl)
+
           pr_lines = [f"- `{pkg}`: `>={old}` -> `>={new}`" for pkg, old, new in bumps]
           pr_body = (
               "## Dependency Floor Bumps\n\n"
               + "\n".join(pr_lines)
-              + f"\n\nPackage version bumped `{old_ver}` -> `{new_ver}`."
+              + f"\n\nVersion bumped `{old_ver}` -> `{new_ver}`."
           )
-
           with open("/tmp/pr_body.txt", "w") as f:
               f.write(pr_body)
 
@@ -88,20 +96,25 @@ jobs:
           print(f"pyproject.toml updated -- version {old_ver} -> {new_ver}")
           PYEOF
 
-      - name: Commit and open PR
+      - name: Commit and open or update PR
         if: steps.check.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          BRANCH="chore/bump-dep-floors-$(date +%Y%m%d)"
+          BRANCH="chore/bump-dep-floors"
           git checkout -b "$BRANCH"
-          git add pyproject.toml
+          git add pyproject.toml CHANGELOG.md
           git commit -m "chore: bump tha-* dependency floors to v${{ steps.check.outputs.new_version }}"
-          git push origin "$BRANCH"
-          gh pr create \
-            --title "chore: bump tha-* dependency floors (${{ steps.check.outputs.new_version }})" \
-            --body-file /tmp/pr_body.txt \
-            --base main \
-            --head "$BRANCH"
+          git push origin "$BRANCH" --force
+          EXISTING=$(gh pr list --base main --head "$BRANCH" --json number --jq '.[0].number')
+          if [ -z "$EXISTING" ]; then
+            gh pr create \
+              --title "chore: bump tha-* dependency floors (${{ steps.check.outputs.new_version }})" \
+              --body-file /tmp/pr_body.txt \
+              --base main \
+              --head "$BRANCH"
+          else
+            echo "PR #$EXISTING already open -- branch updated in place."
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
