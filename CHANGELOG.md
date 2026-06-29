@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.16] - 2026-06-29
+### Changed
+- `tha-req-runner[httpx]` is now a standard dependency — the `[all]` extra is removed; httpx ships with the base install.
+
 ## [0.1.15] - 2026-06-29
 ### Changed
 - Bumped dep floors: tha-csv-runner>=0.3.3.
