@@ -1,0 +1,9 @@
+name: Auto-assign PR
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  assign:
+    uses: tha-guy-nate/tha-github-workflows/.github/workflows/auto-assign-pr.yml@main
