@@ -4,6 +4,19 @@ on:
   pull_request:
     types: [opened, reopened]
 
+permissions:
+  pull-requests: write
+
 jobs:
   assign:
-    uses: tha-guy-nate/tha-github-workflows/.github/workflows/auto-assign-pr.yml@main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              assignees: ['tha-guy-nate']
+            });
