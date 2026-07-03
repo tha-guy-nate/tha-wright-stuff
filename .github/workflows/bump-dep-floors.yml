@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '0 9 * * *'  # Daily at 9am UTC
   workflow_dispatch:
+  repository_dispatch:
+    types: [tha-lib-published]
 
 permissions:
   contents: write
