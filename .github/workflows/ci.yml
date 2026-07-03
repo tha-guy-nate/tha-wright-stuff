@@ -12,7 +12,7 @@ jobs:
   ci:
     uses: tha-guy-nate/tha-github-workflows/.github/workflows/python-ci.yml@main
     with:
-      python-versions: '["3.10", "3.11", "3.12", "3.13"]'
+      python-versions: '["3.10", "3.11", "3.12", "3.13", "3.14"]'
 
   auto-tag:
     if: github.event_name == 'push'
