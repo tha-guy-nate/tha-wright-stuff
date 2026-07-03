@@ -2,6 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/tha-wright-stuff)](https://pypi.org/project/tha-wright-stuff/)
 [![Python](https://img.shields.io/pypi/pyversions/tha-wright-stuff)](https://pypi.org/project/tha-wright-stuff/)
+[![codecov](https://codecov.io/gh/tha-guy-nate/tha-wright-stuff/graph/badge.svg)](https://codecov.io/gh/tha-guy-nate/tha-wright-stuff)
 [![dep floors](https://github.com/tha-guy-nate/tha-wright-stuff/actions/workflows/dep-floors-check.yml/badge.svg)](https://github.com/tha-guy-nate/tha-wright-stuff/actions/workflows/dep-floors-check.yml)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
