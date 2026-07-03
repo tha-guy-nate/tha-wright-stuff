@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.19] - 2026-07-03
+### Added
+- Python 3.14 classifier and CI support.
+- PR template (What/Why/How + Test Plan sections), part of a cross-repo consistency sweep.
+
 ## [0.1.18] - 2026-07-03
 ### Changed
 - Bumped dep floors: tha-snowflake-runner>=0.2.0.
