@@ -1,0 +1,106 @@
+name: Check Yanked Dependency Floors
+
+on:
+  schedule:
+    - cron: '30 9 * * *'  # Daily at 9:30am UTC, after Bump Dependency Floors
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scan family repos for yanked dependency floors
+        id: check
+        run: |
+          python3 - <<'PYEOF'
+          import re, json, os, sys
+          from urllib.request import urlopen
+
+          OWNER = "tha-guy-nate"
+          REPOS = [
+              "tha-aws-runner", "tha-csv-runner", "tha-edfi-runner",
+              "tha-google-runner", "tha-map-runner", "tha-req-runner",
+              "tha-snowflake-runner", "tha-utils-helper", "tha-wright-stuff",
+          ]
+          pattern = re.compile(r'"(tha-[a-z-]+)(\[[a-z, ]+\])?>=([\d]+\.[\d]+\.[\d]+)"')
+
+          findings = []
+          for repo in REPOS:
+              url = f"https://raw.githubusercontent.com/{OWNER}/{repo}/main/pyproject.toml"
+              try:
+                  with urlopen(url, timeout=10) as r:
+                      content = r.read().decode()
+              except Exception as e:
+                  print(f"  skipping {repo}: could not fetch pyproject.toml ({e})")
+                  continue
+
+              for pkg, extra, floor in pattern.findall(content):
+                  extra = extra or ""
+                  try:
+                      with urlopen(f"https://pypi.org/pypi/{pkg}/{floor}/json", timeout=10) as r:
+                          info = json.load(r)["info"]
+                  except Exception as e:
+                      print(f"  {repo}: {pkg}{extra}>={floor} -- PyPI lookup failed ({e})")
+                      continue
+
+                  if info.get("yanked"):
+                      reason = info.get("yanked_reason") or "(no reason given)"
+                      findings.append((repo, pkg, extra, floor, reason))
+                      print(f"  YANKED: {repo} depends on {pkg}{extra}>={floor} -- {reason}")
+                  else:
+                      print(f"  ok: {repo} -> {pkg}{extra}>={floor}")
+
+          gho = os.environ["GITHUB_OUTPUT"]
+          if not findings:
+              print("No yanked dependency floors found.")
+              with open(gho, "a") as f:
+                  f.write("found=false\n")
+              sys.exit(0)
+
+          lines = [
+              f"- **{repo}** depends on `{pkg}{extra}>={floor}`, which is **yanked** on PyPI: {reason}"
+              for repo, pkg, extra, floor, reason in findings
+          ]
+          body = (
+              "Automated daily scan found dependency floor(s) pointing at a yanked PyPI release.\n\n"
+              + "\n".join(lines)
+              + "\n\nBump the floor in the affected repo(s) to a non-yanked version "
+              + "(the family's `bump-dep-floors.yml` will not do this automatically if the "
+              + "yanked version is still >= the latest known floor bump target -- verify manually).\n"
+          )
+          with open("/tmp/issue_body.txt", "w") as f:
+              f.write(body)
+          with open(gho, "a") as f:
+              f.write("found=true\n")
+          PYEOF
+
+      - name: Open or update tracking issue
+        if: steps.check.outputs.found == 'true'
+        run: |
+          TITLE="Yanked dependency floor(s) detected"
+          EXISTING=$(gh issue list --repo "$GH_REPO" --search "$TITLE in:title" --state open --json number --jq '.[0].number')
+          if [ -z "$EXISTING" ]; then
+            gh issue create --repo "$GH_REPO" --title "$TITLE" --body-file /tmp/issue_body.txt
+          else
+            gh issue edit "$EXISTING" --repo "$GH_REPO" --body-file /tmp/issue_body.txt
+            gh issue comment "$EXISTING" --repo "$GH_REPO" --body "Re-scanned $(date -u +%Y-%m-%d) -- still detected, issue body updated above."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+
+      - name: Close resolved tracking issue
+        if: steps.check.outputs.found == 'false'
+        run: |
+          TITLE="Yanked dependency floor(s) detected"
+          EXISTING=$(gh issue list --repo "$GH_REPO" --search "$TITLE in:title" --state open --json number --jq '.[0].number')
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --repo "$GH_REPO" --body "Re-scanned $(date -u +%Y-%m-%d) -- no yanked floors found, closing."
+            gh issue close "$EXISTING" --repo "$GH_REPO"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}

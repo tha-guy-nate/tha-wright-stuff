@@ -28,11 +28,11 @@ jobs:
           with open("pyproject.toml") as f:
               content = f.read()
 
-          pattern = r'"(tha-[a-z-]+)>=([\d]+\.[\d]+\.[\d]+)"'
-          deps = re.findall(pattern, content)
+          pattern = r'"(tha-[a-z-]+)(\[[a-z, ]+\])?>=([\d]+\.[\d]+\.[\d]+)"'
+          deps = [(pkg, extra or "", floor) for pkg, extra, floor in re.findall(pattern, content)]
 
           bumps = []
-          for pkg, floor in deps:
+          for pkg, extra, floor in deps:
               try:
                   with urlopen(f"https://pypi.org/pypi/{pkg}/json", timeout=10) as r:
                       latest = json.load(r)["info"]["version"]
@@ -44,10 +44,10 @@ jobs:
               latest_t = tuple(int(x) for x in latest.split("."))
 
               if latest_t > floor_t:
-                  bumps.append((pkg, floor, latest))
-                  print(f"  {pkg}: >={floor} -> >={latest}")
+                  bumps.append((pkg, extra, floor, latest))
+                  print(f"  {pkg}{extra}: >={floor} -> >={latest}")
               else:
-                  print(f"  {pkg}: >={floor} ok (latest={latest})")
+                  print(f"  {pkg}{extra}: >={floor} ok (latest={latest})")
 
           gho = os.environ["GITHUB_OUTPUT"]
           if not bumps:
@@ -57,8 +57,8 @@ jobs:
               sys.exit(0)
 
           new_content = content
-          for pkg, old, new in bumps:
-              new_content = new_content.replace(f'"{pkg}>={old}"', f'"{pkg}>={new}"')
+          for pkg, extra, old, new in bumps:
+              new_content = new_content.replace(f'"{pkg}{extra}>={old}"', f'"{pkg}{extra}>={new}"')
 
           ver_m = re.search(r'^version = "(\d+)\.(\d+)\.(\d+)"', new_content, re.MULTILINE)
           major, minor, patch = int(ver_m.group(1)), int(ver_m.group(2)), int(ver_m.group(3))
@@ -70,7 +70,7 @@ jobs:
               f.write(new_content)
 
           today = date.today().isoformat()
-          bumped_summary = ", ".join(f"{pkg}>={new}" for pkg, _, new in bumps)
+          bumped_summary = ", ".join(f"{pkg}{extra}>={new}" for pkg, extra, _, new in bumps)
           changelog_entry = (
               f"## [{new_ver}] - {today}\n"
               f"### Changed\n"
@@ -82,7 +82,7 @@ jobs:
           with open("CHANGELOG.md", "w") as f:
               f.write(cl)
 
-          pr_lines = [f"- `{pkg}`: `>={old}` -> `>={new}`" for pkg, old, new in bumps]
+          pr_lines = [f"- `{pkg}{extra}`: `>={old}` -> `>={new}`" for pkg, extra, old, new in bumps]
           pr_body = (
               "## Dependency Floor Bumps\n\n"
               + "\n".join(pr_lines)
