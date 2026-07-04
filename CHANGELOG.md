@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.21] - 2026-07-03
 ### Added
-- `check-yanked-floors.yml` workflow: daily scan of every `tha-*` dependency floor across all family repos against PyPI's per-release `yanked` status; auto-opens/updates a tracking issue on this repo when a floor points at a yanked release.
+- `check-yanked-floors.yml` workflow: daily scan of this repo's `tha-*` dependency floors against PyPI's per-release `yanked` status, via the new shared `tha-github-workflows` reusable workflow of the same name; auto-opens/updates/closes a tracking issue here when a floor points at a yanked release.
 ### Fixed
 - `bump-dep-floors.yml` / `dep-floors-check.yml`: the dependency-floor regex didn't account for extras syntax (`pkg[extra]>=X.Y.Z`), so `tha-req-runner[httpx]>=0.2.3` was silently never checked or bumped by either workflow.
 - Bumped the now-checked `tha-req-runner[httpx]` floor from `>=0.2.3` to `>=0.2.5` — both 0.2.2 and 0.2.3 are yanked on PyPI; 0.2.5 is the current latest.
