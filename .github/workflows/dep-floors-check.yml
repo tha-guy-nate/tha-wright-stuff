@@ -20,19 +20,19 @@ jobs:
           with open("pyproject.toml") as f:
               content = f.read()
 
-          pattern = r'"(tha-[a-z-]+)>=([\d]+\.[\d]+\.[\d]+)"'
-          deps = re.findall(pattern, content)
+          pattern = r'"(tha-[a-z-]+)(\[[a-z, ]+\])?>=([\d]+\.[\d]+\.[\d]+)"'
+          deps = [(pkg, extra or "", floor) for pkg, extra, floor in re.findall(pattern, content)]
 
           stale = []
-          for pkg, floor in deps:
+          for pkg, extra, floor in deps:
               try:
                   with urlopen(f"https://pypi.org/pypi/{pkg}/json", timeout=10) as r:
                       latest = json.load(r)["info"]["version"]
               except Exception:
-                  print(f"  skipping {pkg}")
+                  print(f"  skipping {pkg}{extra}")
                   continue
               if tuple(int(x) for x in latest.split(".")) > tuple(int(x) for x in floor.split(".")):
-                  stale.append(f"{pkg} (>={floor}, latest {latest})")
+                  stale.append(f"{pkg}{extra} (>={floor}, latest {latest})")
                   print(f"  stale: {stale[-1]}")
 
           if not stale:

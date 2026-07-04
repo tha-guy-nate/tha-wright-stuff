@@ -1,0 +1,12 @@
+name: Yanked Floor Check
+
+on:
+  schedule:
+    - cron: '30 9 * * *'  # Daily at 9:30am UTC, after Bump Dependency Floors
+  workflow_dispatch:
+
+jobs:
+  check:
+    permissions:
+      issues: write
+    uses: tha-guy-nate/tha-github-workflows/.github/workflows/check-yanked-floors.yml@main
