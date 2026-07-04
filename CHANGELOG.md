@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.1.22] - 2026-07-04
+### Changed
+- Bumped dep floors: tha-csv-runner>=0.3.4, tha-map-runner>=0.2.10, tha-req-runner[httpx]>=0.2.6, tha-aws-runner>=0.2.7, tha-edfi-runner>=0.1.7, tha-snowflake-runner>=0.2.2.
 ### Fixed
 - Documented a fix in `tha-github-workflows`' shared `python-ci.yml`: the `Dependency check` step ran `deptry` unconditionally, which broke CI here since this repo deliberately has no `deptry` dev dependency. The step is now guarded on `[tool.deptry]` being present in `pyproject.toml`. No change needed in this repo itself — this entry exists to trigger a CI run confirming the fix.
 
