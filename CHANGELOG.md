@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.24] - 2026-07-05
+### Changed
+- Bumped dep floors: tha-map-runner>=0.2.12.
+
 ## [0.1.23] - 2026-07-05
 ### Changed
 - Bumped dep floors: tha-csv-runner>=0.3.5, tha-map-runner>=0.2.11, tha-req-runner[httpx]>=0.2.7, tha-aws-runner>=0.2.8, tha-edfi-runner>=0.1.8, tha-google-runner>=0.2.1, tha-snowflake-runner>=0.2.3.
