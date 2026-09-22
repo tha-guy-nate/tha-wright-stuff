@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.38] - 2026-09-22
+### Changed
+- Bumped dep floors: tha-req-runner[httpx2]>=0.3.0 (renamed from the `httpx` extra — tha-req-runner 0.3.0 replaced the `httpx` backend with `httpx2`), tha-edfi-runner>=0.1.15, tha-google-runner>=0.3.0.
+
 ## [0.1.37] - 2026-09-08
 ### Changed
 - Bumped dep floors: tha-edfi-runner>=0.1.14.
