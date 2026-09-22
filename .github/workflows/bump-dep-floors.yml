@@ -35,7 +35,8 @@ jobs:
           for pkg, extra, floor in deps:
               try:
                   with urlopen(f"https://pypi.org/pypi/{pkg}/json", timeout=10) as r:
-                      latest = json.load(r)["info"]["version"]
+                      info = json.load(r)["info"]
+                      latest = info["version"]
               except Exception:
                   print(f"  skipping {pkg} (PyPI lookup failed)")
                   continue
@@ -44,6 +45,21 @@ jobs:
               latest_t = tuple(int(x) for x in latest.split("."))
 
               if latest_t > floor_t:
+                  if extra:
+                      # `extra` is a bracket carried forward as literal text (e.g. "[httpx]") --
+                      # this script has no way to know an extra was renamed upstream, so verify
+                      # it still exists on the target version rather than silently bumping to a
+                      # version/extra combo that doesn't resolve.
+                      extra_names = [e.strip() for e in extra.strip("[]").split(",") if e.strip()]
+                      provided = set(info.get("provides_extra") or [])
+                      missing = [e for e in extra_names if e not in provided]
+                      if missing:
+                          print(
+                              f"  WARNING: {pkg}{extra}: extra(s) {missing} not found on "
+                              f"{pkg} {latest} (available: {sorted(provided)}) -- "
+                              f"SKIPPING auto-bump, needs a manual PR"
+                          )
+                          continue
                   bumps.append((pkg, extra, floor, latest))
                   print(f"  {pkg}{extra}: >={floor} -> >={latest}")
               else:
