@@ -28,7 +28,7 @@ jobs:
           with open("pyproject.toml") as f:
               content = f.read()
 
-          pattern = r'"(tha-[a-z-]+)(\[[a-z, ]+\])?>=([\d]+\.[\d]+\.[\d]+)"'
+          pattern = r'"(tha-[a-z-]+)(\[[a-z0-9, _-]+\])?==([\d]+\.[\d]+\.[\d]+)"'
           deps = [(pkg, extra or "", floor) for pkg, extra, floor in re.findall(pattern, content)]
 
           bumps = []
@@ -61,9 +61,9 @@ jobs:
                           )
                           continue
                   bumps.append((pkg, extra, floor, latest))
-                  print(f"  {pkg}{extra}: >={floor} -> >={latest}")
+                  print(f"  {pkg}{extra}: =={floor} -> =={latest}")
               else:
-                  print(f"  {pkg}{extra}: >={floor} ok (latest={latest})")
+                  print(f"  {pkg}{extra}: =={floor} ok (latest={latest})")
 
           gho = os.environ["GITHUB_OUTPUT"]
           if not bumps:
@@ -74,7 +74,7 @@ jobs:
 
           new_content = content
           for pkg, extra, old, new in bumps:
-              new_content = new_content.replace(f'"{pkg}{extra}>={old}"', f'"{pkg}{extra}>={new}"')
+              new_content = new_content.replace(f'"{pkg}{extra}=={old}"', f'"{pkg}{extra}=={new}"')
 
           ver_m = re.search(r'^version = "(\d+)\.(\d+)\.(\d+)"', new_content, re.MULTILINE)
           major, minor, patch = int(ver_m.group(1)), int(ver_m.group(2)), int(ver_m.group(3))
@@ -86,11 +86,11 @@ jobs:
               f.write(new_content)
 
           today = date.today().isoformat()
-          bumped_summary = ", ".join(f"{pkg}{extra}>={new}" for pkg, extra, _, new in bumps)
+          bumped_summary = ", ".join(f"{pkg}{extra}=={new}" for pkg, extra, _, new in bumps)
           changelog_entry = (
               f"## [{new_ver}] - {today}\n"
               f"### Changed\n"
-              f"- Bumped dep floors: {bumped_summary}.\n"
+              f"- Bumped dep pins: {bumped_summary}.\n"
           )
           with open("CHANGELOG.md") as f:
               cl = f.read()
@@ -98,9 +98,9 @@ jobs:
           with open("CHANGELOG.md", "w") as f:
               f.write(cl)
 
-          pr_lines = [f"- `{pkg}{extra}`: `>={old}` -> `>={new}`" for pkg, extra, old, new in bumps]
+          pr_lines = [f"- `{pkg}{extra}`: `=={old}` -> `=={new}`" for pkg, extra, old, new in bumps]
           pr_body = (
-              "## Dependency Floor Bumps\n\n"
+              "## Dependency Pin Bumps\n\n"
               + "\n".join(pr_lines)
               + f"\n\nVersion bumped `{old_ver}` -> `{new_ver}`."
           )

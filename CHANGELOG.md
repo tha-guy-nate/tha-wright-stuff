@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-25
+### Changed
+- Pinned all tha-* dependencies to exact versions (`==`) instead of minimum floors (`>=`). Installing `tha-wright-stuff` now yields one known-good, CI-tested set of family versions; installing a different version of a member lib alongside it will now conflict at resolve time.
+- `bump-dep-floors.yml` and `dep-floors-check.yml` now match and rewrite `==` pins.
+- Fixed both workflows' extras regex, which could not match extras containing digits (e.g. `[httpx2]`), so `tha-req-runner` was silently skipped by the bump and status checks.
+
 ## [0.1.38] - 2026-09-22
 ### Changed
 - Bumped dep floors: tha-req-runner[httpx2]>=0.3.0 (renamed from the `httpx` extra — tha-req-runner 0.3.0 replaced the `httpx` backend with `httpx2`), tha-edfi-runner>=0.1.15, tha-google-runner>=0.3.0.
