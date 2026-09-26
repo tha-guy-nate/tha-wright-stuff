@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tha-wright-stuff"
-version = "0.2.0"
+version = "0.2.1"
 description = "A Tabular Helper meta-package that bundles the full tha-* library family in a single install."
 readme = "README.md"
 license = { text = "MIT" }
@@ -25,14 +25,14 @@ classifiers = [
 ]
 keywords = ["tabular", "helper", "api", "csv", "aws", "edfi", "google", "snowflake", "utilities", "meta"]
 dependencies = [
-    "tha-csv-runner==0.4.2",
+    "tha-csv-runner==0.6.0",
     "tha-map-runner==0.3.1",
     "tha-req-runner[httpx2]==0.3.0",
-    "tha-aws-runner==0.2.10",
+    "tha-aws-runner==0.4.0",
     "tha-utils-helper==0.2.6",
-    "tha-edfi-runner==0.1.15",
+    "tha-edfi-runner==0.2.0",
     "tha-google-runner==0.3.0",
-    "tha-snowflake-runner==0.3.4",
+    "tha-snowflake-runner==0.5.0",
 ]
 
 [project.optional-dependencies]

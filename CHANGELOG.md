@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-09-26
+### Changed
+- Bumped dep pins: tha-csv-runner==0.6.0, tha-aws-runner==0.4.0, tha-edfi-runner==0.2.0, tha-snowflake-runner==0.5.0.
+- New behavior in the bumped libs (see each lib's CHANGELOG):
+  - `label=` keyword-only progress override added to tha-aws-runner (0.4.0), tha-csv-runner (0.6.0), tha-edfi-runner (0.2.0) and tha-snowflake-runner (0.5.0). `desc` / `progress_desc` stays the step prefix (`"[4/7]: <text>"`) and `label` replaces the text after it.
+  - **Breaking for callers of csv, snowflake and edfi:** their previously released `desc` / `progress_desc` semantics (csv 0.5.0, snowflake 0.4.0, edfi 0.1.16 used it as the whole label) are reverted to a step prefix. Callers passing full text (e.g. `"[4/7]: Checking token permission"`) now get the default text appended; pass just `"[4/7]"` and, for different wording, `label=`. `tha-edfi-runner`'s `batch_fetch_tokens` also moves from verbatim to prefix.
+  - tha-csv-runner 0.6.0 keeps the shorter progress bars and the blank line before the "Done" message from 0.5.0; tha-snowflake-runner 0.5.0 keeps the pre-query `status_cb` message and has no tqdm dependency.
+  - Every lib now reads `__version__` from package metadata (the four bumped libs in their new releases; google, map, req and utils-helper in unreleased no-bump changes).
+
 ## [0.2.0] - 2026-09-25
 ### Changed
 - Pinned all tha-* dependencies to exact versions (`==`) instead of minimum floors (`>=`). Installing `tha-wright-stuff` now yields one known-good, CI-tested set of family versions; installing a different version of a member lib alongside it will now conflict at resolve time.
