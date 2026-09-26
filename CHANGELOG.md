@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-09-26
+### Changed
+- Bumped dep pins: tha-csv-runner==0.6.0, tha-aws-runner==0.4.0, tha-edfi-runner==0.2.0, tha-snowflake-runner==0.5.0.
+
 ## [0.2.0] - 2026-09-25
 ### Changed
 - Pinned all tha-* dependencies to exact versions (`==`) instead of minimum floors (`>=`). Installing `tha-wright-stuff` now yields one known-good, CI-tested set of family versions; installing a different version of a member lib alongside it will now conflict at resolve time.
