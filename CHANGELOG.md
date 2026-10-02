@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Dev dependencies are now pinned to exact versions (`==`) instead of `>=` floors, and updated to the latest releases: `pytest==9.1.1`, `ruff==0.16.10`, `mypy==2.4.0`, `pip-audit==2.10.1`, `pytest-cov==7.1.0`.
+
 ## [0.2.1] - 2026-09-26
 ### Changed
 - Bumped dep pins: tha-csv-runner==0.6.0, tha-aws-runner==0.4.0, tha-edfi-runner==0.2.0, tha-snowflake-runner==0.5.0.
