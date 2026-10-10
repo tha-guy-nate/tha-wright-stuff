@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-10-10
+### Changed
+- Bumped dep pins: tha-csv-runner==0.7.0, tha-req-runner[httpx2]==0.4.0, tha-aws-runner==0.5.0, tha-edfi-runner==0.3.0, tha-google-runner==0.4.0, tha-snowflake-runner==0.6.0.
+
 ## [0.2.1] - 2026-09-26
 ### Changed
 - Bumped dep pins: tha-csv-runner==0.6.0, tha-aws-runner==0.4.0, tha-edfi-runner==0.2.0, tha-snowflake-runner==0.5.0.
