@@ -32,7 +32,7 @@ dependencies = [
     "tha-utils-helper==0.2.6",
     "tha-edfi-runner==0.3.0",
     "tha-google-runner==0.3.0",
-    "tha-snowflake-runner==0.5.0",
+    "tha-snowflake-runner==0.6.0",
 ]
 
 [project.optional-dependencies]
